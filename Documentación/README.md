@@ -26,4 +26,4 @@ Este modelo establece la semántica de las ramas para garantizar una trazabilida
 - `Setup/*/#idcard`
 - `Hotfix/*/#idcard`
 
-El `*` debe ser sustituido por un nombre que identifique las tareas realizadas en dicha rama. El #idcard representa el id de la tarjeta del backlog.
+El `*` debe ser sustituido por un nombre que identifique las tareas realizadas en dicha rama. El #idcard representa el id de la tarjeta del backlog (si corresponde).
