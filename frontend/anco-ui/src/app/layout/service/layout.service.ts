@@ -78,10 +78,51 @@ export class LayoutService {
 
     private initialized = false;
 
+    private storageKey = 'layoutConfig';
+
+    private persistConfig(config: layoutConfig): void {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                localStorage.setItem(this.storageKey, JSON.stringify(config));
+            }
+        } catch (e) {
+        }
+    }
+
+    private loadConfigFromStorage(): layoutConfig | null {
+        try {
+            if (typeof window === 'undefined' || !window.localStorage) return null;
+
+            const raw = localStorage.getItem(this.storageKey);
+            if (!raw) return null;
+
+            const parsed = JSON.parse(raw) as layoutConfig;
+            return parsed;
+        } catch (e) {
+            return null;
+        }
+    }
+
     constructor() {
+        const saved = this.loadConfigFromStorage();
+        if (saved) {
+            const merged: layoutConfig = {
+                preset: saved.preset ?? this._config.preset,
+                primary: saved.primary ?? this._config.primary,
+                surface: saved.surface ?? this._config.surface,
+                darkTheme: typeof saved.darkTheme === 'boolean' ? saved.darkTheme : this._config.darkTheme,
+                menuMode: saved.menuMode ?? this._config.menuMode
+            };
+
+            this.layoutConfig.set(merged);
+            this._config = { ...merged };
+            this.toggleDarkMode(merged);
+        }
+
         effect(() => {
             const config = this.layoutConfig();
             if (config) {
+                this.persistConfig(config);
                 this.onConfigUpdate();
             }
         });
@@ -116,7 +157,7 @@ export class LayoutService {
             .then(() => {
                 this.onTransitionEnd();
             })
-            .catch(() => {});
+            .catch(() => { });
     }
 
     toggleDarkMode(config?: layoutConfig): void {

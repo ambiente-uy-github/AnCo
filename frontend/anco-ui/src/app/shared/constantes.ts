@@ -29,6 +29,6 @@ export const AMBIENTES = [
     { label: 'Producción', value: 2 }
 ];
 
-export type TipoDato = typeof TIPOS_DATO[number]['value'];
+export type tipo_dato = typeof TIPOS_DATO[number]['value'];
 export type TipoFrecuencia = typeof FRECUENCIAS_ENVIO[number]['value'];
 export type TipoAmbiente = typeof AMBIENTES[number]['value'];

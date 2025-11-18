@@ -21,7 +21,8 @@ export class AppProfile {
             items: [
                 {
                     label: 'Configuraciones',
-                    icon: 'pi pi-fw pi-cog'
+                    icon: 'pi pi-fw pi-cog',
+                    routerLink: ['/perfil/configuraciones']
                 },
             ]
         },

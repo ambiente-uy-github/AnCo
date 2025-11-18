@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Product, ProductService } from '../service/product.service';
+import { Contrato, ContratoService } from '../service/contratos.servicio';
 
 @Component({
     selector: 'app-contrato-detalle',
@@ -14,39 +14,51 @@ import { Product, ProductService } from '../service/product.service';
 
             <div *ngIf="loading">Cargando...</div>
 
-            <div *ngIf="!loading && producto">
-                <h2 class="text-2xl font-bold">{{ producto.name }}</h2>
-                <p class="text-sm text-muted">Código: {{ producto.code }}</p>
-                <p class="mt-3">{{ producto.description }}</p>
+            <div *ngIf="!loading && contrato">
+                <h2 class="text-2xl font-bold">Contrato {{ contrato.id }}</h2>
+                <p class="text-sm text-muted">ID Externo: {{ contrato.id_externo || '-' }}</p>
+
+                <div class="mt-3">
+                    <p><strong>Empresa:</strong> {{ contrato.empresa?.razon_social }}</p>
+                    <p><strong>Planta:</strong> {{ contrato.planta?.nombre }}</p>
+                    <p><strong>Emisor:</strong> {{ contrato.emisor?.nombre }} ({{ contrato.emisor?.tabla }})</p>
+                    <p><strong>Fecha Desde:</strong> {{ contrato.fecha_desde | date:'short' }}</p>
+                    <p><strong>Tipo Dato:</strong> {{ contrato.tipo_dato }}</p>
+                    <p><strong>Frecuencia:</strong> {{ contrato.frecuencia_envio }}</p>
+                    <p><strong>Tiempo Tolerancia (min):</strong> {{ contrato.tiempo_tolerancia }}</p>
+                    <p><strong>Activo:</strong> {{ contrato.activo ? 'Sí' : 'No' }}</p>
+                </div>
 
                 <div class="mt-4">
-                    <p><strong>Precio:</strong> {{ producto.price | currency:'USD' }}</p>
-                    <p><strong>Categoría:</strong> {{ producto.category }}</p>
-                    <p><strong>Cantidad:</strong> {{ producto.quantity }}</p>
-                    <p><strong>Estado:</strong> {{ producto.inventoryStatus }}</p>
+                    <h4>Parámetros</h4>
+                    <div *ngIf="contrato.parametros?.length; else sinParams">
+                        <ul class="list-disc ml-6">
+                            <li *ngFor="let p of contrato.parametros">{{ p.matriz }} - {{ p.parametro?.nombre }} ({{ p.unidad }}) [{{ p.limite_inferior }} - {{ p.limite_superior }}]</li>
+                        </ul>
+                    </div>
+                    <ng-template #sinParams>Sin parámetros</ng-template>
                 </div>
             </div>
 
-            <div *ngIf="!loading && !producto">Contrato no encontrado.</div>
+            <div *ngIf="!loading && !contrato">Contrato no encontrado.</div>
         </div>
     `
 })
 export class ContratoDetalle implements OnInit {
-    producto: Product | null = null;
+    contrato: Contrato | null = null;
     loading = true;
 
-    constructor(private route: ActivatedRoute, private svc: ProductService) { }
+    constructor(private route: ActivatedRoute, private svc: ContratoService) { }
 
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
-            this.svc.getAll().then((all) => {
-                const found = all.find((p) => p.id === id);
-                this.producto = found || null;
+            this.svc.getById(id).then((found) => {
+                this.contrato = found || null;
                 this.loading = false;
             }).catch(() => {
                 this.loading = false;
-                this.producto = null;
+                this.contrato = null;
             });
         } else {
             this.loading = false;

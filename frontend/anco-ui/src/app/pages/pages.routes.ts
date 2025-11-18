@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { Documentation } from './documentation/documentation';
-import { Crud } from './crud/crud';
-import { Empty } from './empty/empty';
 import { Contratos } from './contratos/contratos';
 import { ContratoDetalle } from './contratos/contrato-detalle';
 import { Empresas } from './empresas/empresas';
@@ -10,16 +8,22 @@ import { Emisores } from './emisores/emisores';
 import { Parametros } from './parametros/parametros';
 import { Frecuencias } from './frecuencias/frecuencias';
 import { Unidades } from './unidades/unidades';
+import { EmpresaDetalle } from './empresas/empresa-detalle';
+import { Crud } from './crud/crud';
+import { Empty } from './empty/empty';
+import { Notificaciones } from './notificaciones/notificaciones';
 
 export default [
-    { path: 'contratos/:id', component: ContratoDetalle },
     { path: 'contratos', component: Contratos },
+    { path: 'contratos/:id', component: ContratoDetalle },
     { path: 'empresas', component: Empresas },
+    { path: 'empresas/:id', component: EmpresaDetalle },
     { path: 'plantas', component: Plantas },
     { path: 'emisores', component: Emisores },
     { path: 'parametros', component: Parametros },
     { path: 'frecuencia', component: Frecuencias },
     { path: 'unidades', component: Unidades },
+    { path: 'notificaciones', component: Notificaciones },
     { path: 'documentation', component: Documentation },
     { path: 'crud', component: Crud },
     { path: 'empty', component: Empty },

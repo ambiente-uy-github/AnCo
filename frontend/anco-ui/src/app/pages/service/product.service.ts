@@ -1256,7 +1256,7 @@ export class ProductService {
         'Yoga Set'
     ];
 
-    getAll() {
+    obtener() {
         return Promise.resolve(this._productos);
     }
 
@@ -1272,14 +1272,14 @@ export class ProductService {
         return Promise.resolve(this._productos);
     }
 
-    async create(product: Product): Promise<Product> {
+    async crear(product: Product): Promise<Product> {
         const nuevo = { ...product } as Product;
         nuevo.id = nuevo.id || this.generateId();
         this._productos = [...this._productos, nuevo];
         return Promise.resolve(nuevo);
     }
 
-    async update(id: string, product: Product): Promise<Product> {
+    async actualizar(id: string, product: Product): Promise<Product> {
         const idx = this._productos.findIndex((p) => p.id === id);
         if (idx > -1) {
             this._productos[idx] = { ...product } as Product;
@@ -1288,7 +1288,7 @@ export class ProductService {
         return Promise.reject(new Error('Product not found'));
     }
 
-    async delete(id: string): Promise<void> {
+    async eliminar(id: string): Promise<void> {
         this._productos = this._productos.filter((p) => p.id !== id);
         return Promise.resolve();
     }

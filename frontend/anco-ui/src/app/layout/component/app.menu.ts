@@ -43,7 +43,7 @@ export class AppMenu {
                         ]
                     },
                     { label: 'Parámetros', icon: 'pi pi-fw pi-cog', routerLink: ['/pages/parametros'] },
-                    { label: 'Frecuencia', icon: 'pi pi-fw pi-clock', routerLink: ['/pages/frecuencia'] },
+                    { label: 'Frecuencias', icon: 'pi pi-fw pi-clock', routerLink: ['/pages/frecuencia'] },
                     { label: 'Unidades', icon: 'pi pi-fw pi-tags', routerLink: ['/pages/unidades'] }
                 ]
             },

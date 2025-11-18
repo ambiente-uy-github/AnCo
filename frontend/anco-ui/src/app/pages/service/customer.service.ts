@@ -9029,7 +9029,7 @@ export class CustomerService {
         ];
     }
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getCustomersMini() {
         return Promise.resolve(this.getData().slice(0, 5));
