@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . '../../environment.php';
+require_once APPPATH . '../environment.php';
 
 $active_group = 'default';
 $query_builder = TRUE;

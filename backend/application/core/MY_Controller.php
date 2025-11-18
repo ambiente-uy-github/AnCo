@@ -1,7 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class MY_Controller extends CI_Controller {
+use chriskacerguis\RestServer\RestController;
+
+require_once APPPATH . 'libraries/php_modules/Response.php';
+
+class MY_Controller extends RestController{
 
     public function __construct() {
         parent::__construct();
@@ -13,17 +17,22 @@ class MY_Controller extends CI_Controller {
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
-    // protected function respond($data, $status = 200) {
-    //     http_response_code($status);
-    //     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    //     exit;
-    // }
-    
-    static public function makeMessage( $ok, $description, $data ){
-        return [
-            "ok" => $ok,
-            "description" => $description,
-            "data" => $data,
-        ];
+
+    protected function get_input_data(){
+    // Captura el raw input JSON
+        $json = file_get_contents("php://input");
+
+        if ($json) {
+            $data = json_decode($json, true);
+
+            // Si el JSON está mal formado
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return [];
+            }
+            return $data;
+        }
+
+        // Si no viene JSON, intentar POST normal
+        return $this->input->post() ?? [];
     }
 }

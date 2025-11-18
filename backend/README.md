@@ -84,9 +84,10 @@ $env = Env::getEnvironment('development');
 ### 3️⃣ Configurar base de datos
 Editar `application/config/database.php` para usar las constantes definidas por `Env`.
 
-### 4️⃣ Agregar libreria ma_modlues
+### 4️⃣ Agregar libreria ma_modules y php_modules
 Repositorio guit: 
 https://github.com/ambiente-uy-github/ma_modules.git
+https://github.com/ambiente-uy-github/php_modules.git
 ```
 
 Si todo está correcto, deberías ver la respuesta:
@@ -177,5 +178,11 @@ Importar en Postman → *File > Import > Collection v2.1*
 **Backend AnCo v1.0.0** – Estructura base funcional y entorno listo para integración con frontend.
 
 ---
+### Endpoints activos
+- GET /empresa
+- GET /empresa/{id}
+- POST /empresa
+- PUT /empresa/{id}
+- DELETE /empresa/{id}
 
 > Proyecto para el Ministerio de Ambiente, de la Republica Oriental del Uruguay en desarrollo – © 2025 AnCo Systems

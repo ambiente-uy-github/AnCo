@@ -1,161 +1,82 @@
 {
-  "info": {
-    "_postman_id": "b6e322dc-anco-api-2025",
-    "name": "Backend AnCo API",
-    "description": "Colección oficial de endpoints REST del backend AnCo.\n\nFramework: CodeIgniter 3 + RESTServer\nBase de datos: PostgreSQL\nEntorno local: http://localhost/api.anco/\n\nVariable principal: {{base_url}}",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "🧾 Auth",
-      "item": [
+    "info": {
+        "name": "AnCo Backend API",
+        "description": "Colección de endpoints para la API de Empresas (CRUD)",
+        "_postman_id": "anco-api-collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
         {
-          "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"user@anco.com\",\n    \"password\": \"123456\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "login"]
-            },
-            "description": "Autentica un usuario y devuelve un token JWT."
-          },
-          "response": []
+            "name": "Empresa - Listar todas",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa"]
+                }
+            }
         },
         {
-          "name": "Register",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"name\": \"Nuevo Usuario\",\n    \"email\": \"nuevo@anco.com\",\n    \"password\": \"123456\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/register",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "register"]
-            },
-            "description": "Crea un nuevo usuario en el sistema."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "🏢 Empresas",
-      "item": [
-        {
-          "name": "Listar Empresas",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/empresa",
-              "host": ["{{base_url}}"],
-              "path": ["empresa"]
-            },
-            "description": "Devuelve la lista de empresas registradas."
-          },
-          "response": []
+            "name": "Empresa - Obtener por ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
         },
         {
-          "name": "Crear Empresa",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"nombre\": \"Mi Empresa S.A.\",\n    \"ruc\": \"123456789\",\n    \"direccion\": \"Montevideo, Uruguay\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/empresa",
-              "host": ["{{base_url}}"],
-              "path": ["empresa"]
-            },
-            "description": "Crea una nueva empresa."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "📄 Contratos",
-      "item": [
-        {
-          "name": "Listar Contratos",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/contrato",
-              "host": ["{{base_url}}"],
-              "path": ["contrato"]
-            },
-            "description": "Devuelve los contratos registrados."
-          },
-          "response": []
+            "name": "Empresa - Crear",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nombre\": \"Ejemplo S.A.\",\n  \"direccion\": \"Calle 123\",\n  \"telefono\": \"099123456\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/empresa",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa"]
+                }
+            }
         },
         {
-          "name": "Crear Contrato",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"empresa_id\": 1,\n    \"tipo\": \"Servicio\",\n    \"monto\": 5000,\n    \"fecha_inicio\": \"2025-11-01\",\n    \"fecha_fin\": \"2026-11-01\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/contrato",
-              "host": ["{{base_url}}"],
-              "path": ["contrato"]
-            },
-            "description": "Registra un nuevo contrato."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "🔍 System - test",
-      "item": [
+            "name": "Empresa - Actualizar",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nombre\": \"Empresa Actualizada\",\n  \"telefono\": \"29010000\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
+        },
         {
-          "name": "Estado API (Home)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{base_url}}/Home",
-              "host": ["{{base_url}}"],
-              "path": ["Home"]
-            },
-            "description": "Verifica que la API esté activa y operativa."
-          },
-          "response": []
+            "name": "Empresa - Eliminar",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
         }
-      ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost/api.anco"
-    }
-  ]
+    ]
 }

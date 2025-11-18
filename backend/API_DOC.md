@@ -1,7 +1,7 @@
 # 📘 API Documentation – Backend AnCo
 
 > Proyecto independiente – API REST desarrollada con **CodeIgniter 3**, **RESTServer** y **PostgreSQL**, consumida por una aplicación Angular.  
-> Base URL local: `http://localhost/api.anco/`
+> Base URL local: `http://localhost/anco/backend/`
 
 ---
 
@@ -28,132 +28,181 @@ Backend AnCo API
     └── POST /contrato
 ```
 
----
+# 📘 API Documentation – Módulo Empresa
 
-## 🧱 1. Auth
+## 🔗 Base URL (desarrollo)
 
-### 🔹 POST `/auth/login`
-**Descripción:** Autentica un usuario y devuelve un token JWT.  
-**Body (JSON):**
-```json
-{
-  "email": "usuario@empresa.com",
-  "password": "123456"
-}
+Con index.php:
 ```
-**Respuesta (200):**
-```json
-{
-  "status": true,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expires_in": 3600
-}
+http://localhost/AnCo/backend/index.php
+```
+
+Con rewrite habilitado:
+```
+http://localhost/AnCo/backend
 ```
 
 ---
 
-## 🏢 2. Empresas
+# 🏢 Módulo: Empresa (CRUD)
 
-### 🔹 GET `/empresa`
-**Descripción:** Devuelve la lista de empresas registradas.  
-**Respuesta:**
+Este módulo permite gestionar empresas: crear, listar, obtener, actualizar y eliminar.
+
+---
+
+# 📌 GET /empresa
+Obtiene el listado completo de empresas.
+
+### ✔️ Respuesta 200 OK
 ```json
-[
-  {
-    "id": 1,
-    "nombre": "TechCorp",
-    "ruc": "123456789",
-    "email": "info@techcorp.com"
+{
+  "ok": true,
+  "description": "Listado de empresas",
+  "data": [
+    {
+      "id_empresa": 1,
+      "razon_social": "Mi Empresa S.A.",
+      "rut": "123456789",
+      "activo": 1,
+      "usuario": "empresa1"
+    }
+  ]
+}
+```
+
+---
+
+# 📌 GET /empresa/{id}
+Obtiene los datos de una empresa específica.
+
+### ✔️ Respuesta 200 OK
+```json
+{
+  "ok": true,
+  "description": "Empresa encontrada",
+  "data": {
+    "id_empresa": 1,
+    "razon_social": "Mi Empresa S.A.",
+    "rut": "123456789",
+    "activo": 1,
+    "usuario": "empresa1"
   }
-]
-```
-
-### 🔹 POST `/empresa`
-**Descripción:** Crea una nueva empresa.  
-**Body (JSON):**
-```json
-{
-  "nombre": "Nueva Empresa",
-  "ruc": "987654321",
-  "email": "nueva@empresa.com"
-}
-```
-**Respuesta (201):**
-```json
-{
-  "status": true,
-  "message": "Empresa creada correctamente"
 }
 ```
 
-### 🔹 PUT `/empresa/{id}`
-**Descripción:** Actualiza los datos de una empresa existente.  
-**Body (JSON):**
+### ❌ Respuesta 404 Not Found
 ```json
 {
-  "nombre": "Empresa Actualizada",
-  "email": "nuevo@correo.com"
-}
-```
-**Respuesta (200):**
-```json
-{
-  "status": true,
-  "message": "Datos actualizados"
-}
-```
-
-### 🔹 DELETE `/empresa/{id}`
-**Descripción:** Elimina una empresa por su ID.  
-**Respuesta (200):**
-```json
-{
-  "status": true,
-  "message": "Empresa eliminada"
+  "ok": false,
+  "description": "Empresa no encontrada",
+  "data": null
 }
 ```
 
 ---
 
-## 📄 3. Contratos
+# 📌 POST /empresa
+Crea una empresa nueva.
 
-### 🔹 GET `/contrato`
-**Descripción:** Devuelve los contratos activos.  
-**Respuesta (200):**
-```json
-[
-  {
-    "id": 12,
-    "empresa_id": 1,
-    "tipo": "servicio",
-    "monto": 3500,
-    "fecha_inicio": "2025-10-01",
-    "fecha_fin": "2026-10-01"
-  }
-]
-```
-
-### 🔹 POST `/contrato`
-**Descripción:** Crea un nuevo contrato asociado a una empresa.  
-**Body (JSON):**
+### Body JSON requerido:
 ```json
 {
-  "empresa_id": 1,
-  "tipo": "consultoría",
-  "monto": 4500,
-  "fecha_inicio": "2025-11-01",
-  "fecha_fin": "2026-05-01"
+  "razon_social": "Mi Empresa S.A.",
+  "rut": "123456789",
+  "activo": 1,
+  "usuario": "empresa1",
+  "pass": "empresatest"
 }
 ```
-**Respuesta (201):**
+
+### ✔️ Respuesta 201 Created
 ```json
 {
-  "status": true,
-  "message": "Contrato creado correctamente"
+  "ok": true,
+  "description": "Empresa creada correctamente",
+  "data": { "id": 10 }
+}
+```
+
+### ❌ Respuesta 400 Bad Request
+```json
+{
+  "ok": false,
+  "description": "El campo razon_social es obligatorio",
+  "data": []
 }
 ```
 
 ---
+
+# 📌 PUT /empresa/{id}
+Actualiza los datos de una empresa existente.
+
+### Body JSON:
+```json
+{
+  "razon_social": "Mi Empresa Actualizada S.A.",
+  "activo": 0
+}
+```
+
+### ✔️ Respuesta 200 OK
+```json
+{
+  "ok": true,
+  "description": "Empresa actualizada correctamente",
+  "data": null
+}
+```
+
+### ❌ Respuesta 400 Bad Request
+```json
+{
+  "ok": false,
+  "description": "ID de empresa requerido",
+  "data": []
+}
+```
+
+---
+
+# 📌 DELETE /empresa/{id}
+Elimina una empresa.
+
+### ✔️ Respuesta 200 OK
+```json
+{
+  "ok": true,
+  "description": "Empresa eliminada correctamente",
+  "data": null
+}
+```
+
+### ❌ Respuesta 404 Not Found
+```json
+{
+  "ok": false,
+  "description": "No se pudo eliminar la empresa",
+  "data": []
+}
+```
+
+---
+
+# 📚 Notas finales
+- Todos los endpoints retornan un formato consistente:
+```json
+{
+  "ok": boolean,
+  "description": "mensaje",
+  "data": { ... }
+}
+```
+- Para enviar JSON en POST y PUT:  
+  **Header obligatorio:**
+```
+Content-Type: application/json
+```
 
 ## 🔍 4. System
 
@@ -181,3 +230,4 @@ Backend AnCo API
 
 ---
 © 2025 Backend AnCo – Equipo de Desarrollo
+

@@ -1,9 +1,9 @@
 <?php
 
-class DefDataBaseInfoambiental {
+class DefConstantesBD {
 
     const DB_NAME_CONFIG = 'recepcionDatosAdmin';
-    
+    const ALIAS_DB_ADMIN_RECEPCION = 'default';    
     const TABLE_EMPRESA = 'empresa';
     const TABLE_REL_EMPRESA_CONEXION = 'empresa_conexion_rel';
     const TABLE_PLANTA = 'planta';
