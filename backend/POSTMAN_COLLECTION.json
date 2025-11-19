@@ -1,0 +1,82 @@
+{
+    "info": {
+        "name": "AnCo Backend API",
+        "description": "Colección de endpoints para la API de Empresas (CRUD)",
+        "_postman_id": "anco-api-collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Empresa - Listar todas",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa"]
+                }
+            }
+        },
+        {
+            "name": "Empresa - Obtener por ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
+        },
+        {
+            "name": "Empresa - Crear",
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nombre\": \"Ejemplo S.A.\",\n  \"direccion\": \"Calle 123\",\n  \"telefono\": \"099123456\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/empresa",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa"]
+                }
+            }
+        },
+        {
+            "name": "Empresa - Actualizar",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nombre\": \"Empresa Actualizada\",\n  \"telefono\": \"29010000\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
+        },
+        {
+            "name": "Empresa - Eliminar",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/empresa/{{id}}",
+                    "host": ["{{base_url}}"],
+                    "path": ["empresa", "{{id}}"]
+                }
+            }
+        }
+    ]
+}
