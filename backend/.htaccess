@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /api.anco/
+
+    # Redirigir peticiones a index.php si no existe archivo o carpeta
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+
+# Seguridad básica: bloquear acceso directo a system y application
+<IfModule mod_rewrite.c>
+    RewriteRule ^system - [F,L]
+    RewriteRule ^application - [F,L]
+</IfModule>
