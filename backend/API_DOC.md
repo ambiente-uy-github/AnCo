@@ -223,7 +223,7 @@ Content-Type: application/json
 ## 📦 Notas para el equipo
 
 - Todos los endpoints están preparados para autenticación JWT (a integrar próximamente).  
-- Base de datos: PostgreSQL.  
+- Base de datos: MySql.  
 - Framework: CodeIgniter 3 + RESTServer.  
 - Documentación y pruebas: Postman (`POSTMAN_COLLECTION.json`).  
 - Entorno local: `http://localhost/api.anco`

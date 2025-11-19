@@ -1,6 +1,6 @@
 {
     "name": "anco/api-backend",
-    "description": "Backend REST API basado en CodeIgniter 3 con RESTServer y PostgreSQL",
+    "description": "Backend REST API basado en CodeIgniter 3 con RESTServer y MySQL",
     "type": "project",
     "license": "MIT",
     "require": {

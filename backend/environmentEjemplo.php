@@ -12,8 +12,8 @@ class EnvEjemplo {
     // -------------------------------------------------------------------------
     private static function getAllEnvironments() {
         $host   = self::getDBServer(ENVIRONMENT);
-        $driver = 'postgre'; // CodeIgniter usa 'postgre'
-        $port   = '5432';
+        $driver = 'mysql'; // CodeIgniter usa 'postgre'
+        $port   = '3306';
 
         return [
             'development' => [
