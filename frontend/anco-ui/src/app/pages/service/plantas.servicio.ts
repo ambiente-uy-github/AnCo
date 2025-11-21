@@ -63,7 +63,7 @@ export class PlantasService {
                     rut: '123124',
                     razon_social: 'Empresa Uno',
                     usuario: 'empresa_uno',
-                    activa: true
+                    activo: true
                 },
                 activo: true
             },
@@ -90,7 +90,7 @@ export class PlantasService {
                     rut: '456789',
                     razon_social: 'Empresa Dos',
                     usuario: 'empresa_dos',
-                    activa: false
+                    activo: false
                 },
                 activo: true
             },
@@ -117,7 +117,7 @@ export class PlantasService {
                     rut: '987654',
                     razon_social: 'Empresa Tres',
                     usuario: 'empresa_tres',
-                    activa: true
+                    activo: true
                 },
                 activo: false
             },

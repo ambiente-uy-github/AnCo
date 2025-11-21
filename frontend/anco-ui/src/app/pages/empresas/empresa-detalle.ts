@@ -20,7 +20,7 @@ import { Empresa, EmpresasService } from '../service/empresas.servicio';
                     <p><strong>Empresa:</strong> {{ empresa?.razon_social }}</p>
                     <p><strong>RUT:</strong> {{ empresa?.rut }}</p>
                     <p><strong>Usuario:</strong> {{ empresa?.usuario }}</p>
-                    <p><strong>Activa:</strong> {{ empresa?.activa ? 'Sí' : 'No' }}</p>
+                    <p><strong>Activa:</strong> {{ empresa?.activo ? 'Sí' : 'No' }}</p>
                 </div>
             </div>
 

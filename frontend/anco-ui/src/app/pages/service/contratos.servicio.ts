@@ -66,7 +66,7 @@ export class ContratoService {
                     rut: '123124',
                     razon_social: 'Empresa Uno',
                     usuario: 'empresa_uno',
-                    activa: true
+                    activo: true
                 },
                 planta: { id: 1, nombre: 'Planta Norte', empresa_id: 1 },
                 emisor: { id: 1, plantaId: 1, nombre: 'Gateway-1', tabla: 'emisiones_agua' },
@@ -89,7 +89,7 @@ export class ContratoService {
                     rut: '123124',
                     razon_social: 'Empresa Uno',
                     usuario: 'empresa_uno',
-                    activa: true
+                    activo: true
                 },
                 planta: { id: 2, nombre: 'Planta Sur', empresa_id: 2 },
                 emisor: { id: 2, plantaId: 2, nombre: 'Gateway-2', tabla: 'emisiones_aire' },

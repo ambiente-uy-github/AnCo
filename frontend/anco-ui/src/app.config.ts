@@ -6,7 +6,6 @@ import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
 import { appRoutes } from './app.routes';
-import { API_CONFIG, apiConfigValue } from './app/core/api-config';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -14,7 +13,6 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
         provideAnimationsAsync(),
-        { provide: API_CONFIG, useValue: apiConfigValue },
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
         MessageService
     ]

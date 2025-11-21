@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges, ChangeDetectorRef, ContentChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -30,6 +30,7 @@ export interface CrudBase {
     mostrarAccionesBase?: boolean;
     accionesEncabezadoExtra?: any[];
     mostrarAccionesEncabezadoBase?: boolean;
+    validarEntidad?: (entidad: any) => boolean | string | Promise<boolean | string>;
 }
 
 export interface CrudBaseServicio<T> {
@@ -61,6 +62,8 @@ export const mensajes = {
         exitoActualizacion: { severity: 'success', summary: 'Éxito', detail: 'Entidad actualizada', life: 3000 },
         errorActualizar: { severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la entidad' },
 
+        errorFaltanDatos: { severity: 'error', summary: 'Error', detail: 'Faltan datos requeridos' },
+
         exitoEliminacion: { severity: 'success', summary: 'Éxito', detail: 'Entidad eliminada con éxito', life: 3000 },
         errorEliminar: { severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la entidad' },
         entidadesEliminadas: { severity: 'success', summary: 'Éxito', detail: 'Entidades eliminadas', life: 3000 },
@@ -68,20 +71,23 @@ export const mensajes = {
     },
 };
 
-
 /**
  * Componente genérico CRUD.
  * Entradas:
- * - servicio: implementación de CrudBaseServicio<T>
- * - columnas: Column[] define las columnas visibles (usar field='actions' para botones)
- * - columnasExportacion: Column[] define las columnas para exportación (opcional)
- * - acciones: acciones adicionales para la barra de herramientas (opcional)
- * - formatos: modelos de formato de exportación (opcional)
- * - titulo: título mostrado en la barra de herramientas
- * - rutaBase: ruta base opcional utilizada para la navegación de vista (no utilizada aquí)
- * 
- * * Alternativamente, se puede proporcionar un único objeto de configuración CrudBase
+ * crudConfig: configuración CRUD que incluye:
+    servicio: CrudBaseServicio<any> | null;
+    titulo: string;
+    columnas: Columna[];
+    formatos?: any[];
+    rutaBase?: string;
+    seleccionMultiple?: boolean;
+    accionesExtra?: any[];
+    mostrarAccionesBase?: boolean;
+    accionesEncabezadoExtra?: any[];
+    mostrarAccionesEncabezadoBase?: boolean;
+    validarEntidad?: (entidad: any) => boolean | string | Promise<boolean | string>;
  */
+
 @Component({
     selector: 'app-crud-base',
     standalone: true,
@@ -231,6 +237,7 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
     mostrarAccionesBase: boolean = true;
     accionesEncabezado: any[] = [];
     mostrarAccionesEncabezadoBase: boolean = true;
+    validarEntidad?: (entidad: any) => boolean | string | Promise<boolean | string>;
 
 
     entidades: any[] = [];
@@ -337,24 +344,31 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
 
     async guardar() {
         this.enviado = true;
+        if (this.validarEntidad) {
+            const validResult = await this.validarEntidad(this.entidad);
+            if (validResult === false) {
+                this.messageService.add(mensajes.notificaciones.errorFaltanDatos);
+                return;
+            }
+        }
 
         if (!this.esEdicion) {
-            this.messageService.add(mensajes.notificaciones.exitoCreacion);
             if (this.servicio && this.servicio.crear) {
                 try {
-                    const creado = await this.resolveResult<any>(this.servicio.crear(this.entidad));
-                    this.entidades = [...this.entidades, creado];
+                    await this.resolveResult<any>(this.servicio.crear(this.entidad));
+                    await this.cargarDatos();
+                    this.messageService.add(mensajes.notificaciones.exitoCreacion);
                 } catch (err) {
                     console.error('crear failed', err);
                     this.messageService.add(mensajes.notificaciones.errorCrear);
                 }
             }
         } else {
-            this.messageService.add(mensajes.notificaciones.exitoActualizacion);
             if (this.entidad.id && this.servicio && this.servicio.actualizar) {
                 try {
                     await this.resolveResult<any>(this.servicio.actualizar(this.entidad.id, this.entidad));
-                    this.entidades = this.entidades.map(e => (e.id === this.entidad.id ? this.entidad : e));
+                    await this.cargarDatos();
+                    this.messageService.add(mensajes.notificaciones.exitoActualizacion);
                 } catch (err) {
                     console.error('actualizar failed', err);
                     this.messageService.add(mensajes.notificaciones.errorActualizar);
@@ -369,10 +383,11 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
         this.confirmationService.confirm({
             ...mensajes.confirmaciones.eliminar,
             accept: async () => {
-                this.messageService.add(mensajes.notificaciones.exitoEliminacion);
                 if (this.servicio && this.servicio.eliminar && item.id) {
                     try {
                         await this.resolveResult<void>(this.servicio.eliminar(item.id));
+                        await this.cargarDatos();
+                        this.messageService.add(mensajes.notificaciones.exitoEliminacion);
                     } catch (err) {
                         console.error('eliminar failed', err);
                         this.messageService.add(mensajes.notificaciones.errorEliminar);
@@ -386,7 +401,6 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
         this.confirmationService.confirm({
             ...mensajes.confirmaciones.eliminarSeleccionadas,
             accept: async () => {
-                this.messageService.add(mensajes.notificaciones.entidadesEliminadas);
                 if (this.servicio && this.servicio.eliminar && this.entidadesSeleccionadas?.length) {
                     const ids = this.entidadesSeleccionadas.map((s: any) => s.id).filter(Boolean) as string[];
                     for (const id of ids) {
@@ -397,6 +411,8 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
                             this.messageService.add(mensajes.notificaciones.errorEliminarUno(id));
                         }
                     }
+                    await this.cargarDatos();
+                    this.messageService.add(mensajes.notificaciones.entidadesEliminadas);
                 }
             }
         });
@@ -407,7 +423,6 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
         const f = (formato || 'CSV').toString().toUpperCase();
         switch (f) {
             case 'CSV':
-                console.log('Exporting in format:', formato);
                 this.dt?.exportCSV();
                 break;
             default:
@@ -443,17 +458,22 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
         if (c.mostrarAccionesBase !== undefined) this.mostrarAccionesBase = !!c.mostrarAccionesBase;
         if (c.accionesEncabezadoExtra !== undefined) this.accionesEncabezado = c.accionesEncabezadoExtra as any[];
         if (c.mostrarAccionesEncabezadoBase !== undefined) this.mostrarAccionesEncabezadoBase = !!c.mostrarAccionesEncabezadoBase;
+        if ((c as any).validarEntidad !== undefined) this.validarEntidad = (c as any).validarEntidad as any;
     }
 
+    /**
+        * @param result
+        * @return Promise<T>
+        *
+        * Esta función resuelve un resultado que puede ser una Promesa, un Observable o un valor directo.
+     */
     private resolveResult<T>(result: Promise<T> | Observable<T> | T): Promise<T> {
         if ((result as any)?.then && typeof (result as any).then === 'function') {
             return result as Promise<T>;
         }
 
         if ((result as any)?.subscribe && typeof (result as any).subscribe === 'function') {
-            return new Promise<T>((resolve, reject) => {
-                (result as Observable<T>).subscribe({ next: v => resolve(v), error: e => reject(e) });
-            });
+            return firstValueFrom(result as Observable<T>);
         }
 
         return Promise.resolve(result as T);
@@ -473,7 +493,7 @@ export class CrudBaseComponent implements OnInit, AfterViewInit, OnChanges {
         const now = new Date();
         const pad = (n: number) => n.toString().padStart(2, '0');
         const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-        const baseName = this.titulo ? this.titulo.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9-_]/g, '') : 'descarga';
+        const baseName = this.titulo ?? 'descarga';
         return `${baseName}_${timestamp}`;
     }
 }
