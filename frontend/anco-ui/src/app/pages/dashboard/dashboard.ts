@@ -9,6 +9,8 @@ import { RevenueStreamWidget } from './components/revenuestreamwidget';
     selector: 'app-dashboard',
     imports: [StatsWidget, RecentSalesWidget, BestSellingWidget, RevenueStreamWidget, NotificationsWidget],
     template: `
+    <h5 class="m-0">Dashboard aquí</h5>
+    <!-- Dashboard 
         <div class="grid grid-cols-12 gap-8">
             <app-stats-widget class="contents" />
             <div class="col-span-12 xl:col-span-6">
@@ -20,6 +22,7 @@ import { RevenueStreamWidget } from './components/revenuestreamwidget';
                 <app-notifications-widget />
             </div>
         </div>
+    -->
     `
 })
 export class Dashboard { }
