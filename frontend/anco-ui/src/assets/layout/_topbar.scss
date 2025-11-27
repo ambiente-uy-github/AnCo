@@ -86,6 +86,21 @@
         gap: 1rem;
     }
 
+    .layout-topbar-center {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        /* allow clicks to pass through if necessary */
+
+        p-tag,
+        ::ng-deep p-tag {
+            pointer-events: auto;
+            /* enable interactions with the tag itself */
+        }
+    }
+
     .layout-topbar-menu-content {
         display: flex;
         gap: 1rem;
